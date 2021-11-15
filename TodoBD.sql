@@ -43,10 +43,11 @@ CREATE TABLE IF NOT EXISTS `TodoBD`.`Task` (
   INDEX `fk_Task_User_idx` (`User_idUser` ASC) VISIBLE,
   CONSTRAINT `fk_Task_User`
     FOREIGN KEY (`User_idUser`)
-    REFERENCES `TodoBD`.`User` (id)
-    ON DELETE NO ACTION
+    REFERENCES `TodoBD`.`User` (idUser)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

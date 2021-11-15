@@ -31,27 +31,29 @@ public class AllTaskServlet extends HttpServlet {
         //List<Task> listValues = StartingTasks.tasks.values().stream()
               //  .collect(Collectors.toList());
         // listValues.forEach(System.out::println);
-
         // convert all received values to json format (google it or use existing logic from other your classes)
 
 
         List<Task> taskList = new ArrayList<>();
-        Connection connection = JdbcConnection.getConnection();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select *from task");
-            while (resultSet.next()) {
-                // take id tasks from resultSet
-                int id = resultSet.getInt("id");
-                // take title tasks from resultSet
-                String title = resultSet.getString("title");
-                // take description tasks from resultSet
-                String description = resultSet.getString("description");
-                //    taskList.add(new Task(id, title, description));
-                taskList.add(new Task(id, title, description));
+        Object userId = req.getSession().getAttribute("userId");
+        if (userId != null) {
+            Connection connection = JdbcConnection.getConnection();
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("select * from task where user_id= " + (int) userId);
+                while (resultSet.next()) {
+                    // take id tasks from resultSet
+                    int id = resultSet.getInt("id");
+                    // take title tasks from resultSet
+                    String title = resultSet.getString("title");
+                    // take description tasks from resultSet
+                    String description = resultSet.getString("description");
+                    //    taskList.add(new Task(id, title, description));
+                    taskList.add(new Task(id, title, description));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         String jsonValues = this.gson.toJson(taskList);

@@ -1,6 +1,7 @@
 package servlet;
 
 import com.google.gson.Gson;
+import jdbc.JdbcConnection;
 import model.Task;
 import startingdata.StartingTasks;
 
@@ -9,6 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateTaskServlet extends HttpServlet {
     private Gson gson = new Gson();
@@ -17,32 +24,32 @@ public class UpdateTaskServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-
-        // step 1 - get task's "title" from request (in Postman send it in params)
+        String idTask = req.getParameter("id");
         String taskTitle = req.getParameter("title");
-        String newTaskDescription = req.getParameter("newDescription");
-        String newTitle = req.getParameter("newTitle");
+        String taskDescription = req.getParameter("description");
+        Object userId = req.getSession().getAttribute("userId");
+        Task task = new Task();
+        if (userId != null) {
 
-
-        Task task;
-        if (newTitle != null) {
-            task = new Task(newTitle, newTaskDescription);
-            StartingTasks.tasks.remove(taskTitle);
-            StartingTasks.tasks.put(newTitle, task);
-        } else {
-            task = new Task(taskTitle, newTaskDescription);
-            StartingTasks.tasks.put(taskTitle, task);
+            Connection connection = JdbcConnection.getConnection();
+            try {
+                Statement statement = connection.createStatement();
+                int updateResult = statement.executeUpdate("update task set title = '" + taskTitle + "',description= '" + taskDescription + "' where id = " +idTask + " and user_id=" + userId );
+                ResultSet resultSet = statement.executeQuery("select * from task where id = " +idTask + " and user_id=" + userId );
+                if (updateResult > 0) {
+                    while (resultSet.next()) {
+                        task.setId(resultSet.getInt("id"));
+                        task.setTitle(resultSet.getString("title"));
+                        task.setDescription(resultSet.getString("description"));
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
+
         String jsonTask = this.gson.toJson(task);
-
-        // get needed Task by "title" from previous step from AbstractTaskServlet.tasks map
-
-        // change task's description (task.setDescription("newDescription"))
-
-        // put Task to AbstractTaskServlet.tasks by the same "title" from step 1
-
-        // set Task to response (JSON)
-
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

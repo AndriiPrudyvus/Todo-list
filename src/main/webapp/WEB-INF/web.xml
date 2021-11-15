@@ -92,5 +92,17 @@
         <servlet-name>updateTask</servlet-name>
         <url-pattern>/updateTask</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <display-name>userDelete</display-name>
+        <servlet-name>userDelete</servlet-name>
+        <servlet-class>servlet.UserDeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userDelete</servlet-name>
+        <url-pattern>/userDelete</url-pattern>
+    </servlet-mapping>
+
+
+
 
 </web-app>

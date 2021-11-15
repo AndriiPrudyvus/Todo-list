@@ -9,12 +9,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class LogoutServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
         PrintWriter out=response.getWriter();
-
-        request.getRequestDispatcher("link.html").include(request, response);
 
         HttpSession session=request.getSession();
         session.invalidate();
