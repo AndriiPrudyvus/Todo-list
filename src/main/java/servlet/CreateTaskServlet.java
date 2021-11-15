@@ -15,44 +15,30 @@ import java.sql.Statement;
 
 public class CreateTaskServlet extends HttpServlet {
     private Gson gson = new Gson();
-    // POST /tasks
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-//        // get task's "title" and "description" from request (in Postman send them in body params)
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String taskTitle = req.getParameter("title");
         String taskDescription = req.getParameter("description");
         Object userId = req.getSession().getAttribute("userId");
         String status = "Error";
         if (userId != null) {
-//
-//        // put received Task from request to AbstractTaskServlet.tasks map
-//        Task task = new Task(taskTitle, taskDescription);
-//        StartingTasks.tasks.put(taskTitle, task);
             Connection connection = JdbcConnection.getConnection();
             try {
                 Statement statement = connection.createStatement();
-
-
                 int createResult = statement.executeUpdate("insert into task(title,description,user_id) values ('" + taskTitle + "','" + taskDescription + "', '" + (int) userId + "')");
-
                 if (createResult > 0) {
                     status = "Ok";
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
-
-        // set received Task to response (JSON)
         String jsonTask = this.gson.toJson(status);
-
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        out.print(status);
+        out.print(jsonTask);
         out.flush();
     }
 }

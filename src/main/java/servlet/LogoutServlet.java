@@ -1,6 +1,5 @@
 package servlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,13 +10,10 @@ import java.io.PrintWriter;
 public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        PrintWriter out=response.getWriter();
-
-        HttpSession session=request.getSession();
+        PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession();
         session.invalidate();
-
         out.print("You are successfully logged out!");
-
         out.close();
     }
 }

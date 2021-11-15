@@ -5,18 +5,10 @@ import java.util.List;
 
 public class User {
     private int id;
-
     private String login;
-
     private String password;
-
     private List<Task> tasks = new ArrayList<>();
 
-
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
 
     public String getLogin() {
         return login;

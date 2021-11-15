@@ -2,7 +2,6 @@ package servlet;
 
 import jdbc.JdbcConnection;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,6 @@ public class LoginServlet extends HttpServlet {
             throws IOException {
 
         PrintWriter out = response.getWriter();
-
         String name = request.getParameter("name");
         String passwordFromReq = request.getParameter("password");
         String passwordFromDb = "";
@@ -33,8 +31,6 @@ public class LoginServlet extends HttpServlet {
                 passwordFromDb = resultSet.getString("password");
                 userId = resultSet.getInt("id");
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -47,6 +43,5 @@ public class LoginServlet extends HttpServlet {
             out.print("Sorry, username or password error!");
         }
         out.close();
-
     }
 }

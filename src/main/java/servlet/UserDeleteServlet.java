@@ -15,15 +15,12 @@ import java.sql.Statement;
 public class UserDeleteServlet extends HttpServlet {
     private Gson gson = new Gson();
 
-    //  DELETE /tasks/{title})
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-
-//        // get task's "title" from request (in Postman send them in params)
         Connection connection = JdbcConnection.getConnection();
         String status = "Error";
         Object userId = req.getSession().getAttribute("userId");
+
         if (userId != null) {
             try {
                 Statement statement = connection.createStatement();
@@ -32,24 +29,15 @@ public class UserDeleteServlet extends HttpServlet {
                 if (deleteResult > 0) {
                     status = "Ok";
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
-
-
-        // send "OK" in response
-
         String jsonTask = this.gson.toJson(status);
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         out.print(jsonTask);
         out.flush();
-
-
-
     }
 }
