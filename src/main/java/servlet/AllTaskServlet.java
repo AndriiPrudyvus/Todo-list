@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllTaskServlet extends HttpServlet {
-    private Gson gson = new Gson();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -36,15 +36,11 @@ public class AllTaskServlet extends HttpServlet {
                     String description = resultSet.getString("description");
                     taskList.add(new Task(id, title, description));
                 }
+                ///// ??? 1)add TaskList to Session
+//                2) sendRedirect no taskservlet
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        String jsonValues = this.gson.toJson(taskList);
-        PrintWriter out = resp.getWriter();
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        out.print(jsonValues);
-        out.flush();
     }
 }
