@@ -1,7 +1,6 @@
 package servlet;
 
-import com.google.gson.Gson;
-import jdbc.JdbcConnection;
+import utils.SqlUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,10 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 @WebServlet("/DeleteTaskServlet")
 public class DeleteTaskServlet extends HttpServlet {
@@ -24,13 +19,11 @@ public class DeleteTaskServlet extends HttpServlet {
         Object userId = req.getSession().getAttribute("userId");
 
         if (userId != null) {
-            Connection connection = JdbcConnection.getConnection();
             try {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(String.format("delete FROM task WHERE id = %s and user_id = %d",
-                        id,(int) userId));
-                req.getRequestDispatcher("/AllTaskServlet").forward(req,resp);
-            } catch (SQLException | ServletException e) {
+                SqlUtils.doUpdate(String.format("delete FROM task WHERE id = %s and user_id = %d",
+                        id, (int) userId));
+                req.getRequestDispatcher("/AllTaskServlet").forward(req, resp);
+            } catch (ServletException e) {
                 e.printStackTrace();
             }
         }
