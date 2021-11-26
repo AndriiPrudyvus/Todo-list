@@ -14,7 +14,6 @@ import java.sql.SQLException;
 @WebServlet("/RegistrationServlet")
 public class CreateUserServlet extends HttpServlet {
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String userLogin = req.getParameter("login");

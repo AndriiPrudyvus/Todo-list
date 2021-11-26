@@ -1,5 +1,6 @@
 package servlet;
 
+import model.Task;
 import utils.SqlUtils;
 import utils.TaskUtils;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 @WebServlet("/GetTaskByIdServlet")
@@ -25,9 +27,13 @@ public class GetTaskByIdServlet extends HttpServlet {
             ResultSet resultSet = SqlUtils.doSelect(String.format("select * from task where id = %s and user_id = %d ",
                     taskId, (int) userId));
             try {
-                req.setAttribute("task", TaskUtils.fillTaskFields(resultSet));
+                Task task = new Task();
+                while(resultSet.next()){
+                    task = TaskUtils.getTaskFromResultSet(resultSet);
+                }
+                req.setAttribute("task", task);
                 req.getRequestDispatcher("/getTaskById.jsp").forward(req, resp);
-            } catch (ServletException e) {
+            } catch (ServletException | SQLException e) {
                 e.printStackTrace();
             }
         }

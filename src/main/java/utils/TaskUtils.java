@@ -8,18 +8,6 @@ import java.sql.SQLException;
 
 public class TaskUtils {
 
-    public static Task fillTaskFields(ResultSet resultSet) {
-        Task task = new Task();
-        try {
-            while (resultSet.next()) {
-                task = getTaskFromResultSet(resultSet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return task;
-    }
-
     public static Task getTaskFromRequest(HttpServletRequest request) {
         String taskId = request.getParameter("taskId");
         String title = request.getParameter("title");
