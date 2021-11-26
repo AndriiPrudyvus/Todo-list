@@ -2,6 +2,7 @@ package servlet;
 
 import jdbc.JdbcConnection;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,24 +31,21 @@ public class LoginServlet extends HttpServlet {
         Connection connection = JdbcConnection.getConnection();
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select *  from user where login = '" + userLogin + "'");
+            ResultSet resultSet = statement.executeQuery(String.format("select * from user where login = '%s'", userLogin));
             while (resultSet.next()) {
                 passwordFromDb = resultSet.getString("password");
                 userId = resultSet.getInt("id");
             }
             if (passwordFromReq.equals(passwordFromDb) && userId > 0) {
-                HttpSession session = request.getSession();
-                session.setAttribute("userId", userId);
-                response.sendRedirect("/allTask.jsp");
+                request.getSession().setAttribute("userId", userId);
+                request.getRequestDispatcher("/AllTaskServlet").forward(request, response);
             } else {
                 request.getSession().setAttribute("errorMessage", "Sorry, username or password error!");
-                request.getSession().setAttribute("NameJsp",userLogin);
-                response.sendRedirect("/login.jsp");
+                request.getSession().setAttribute("NameJsp", userLogin);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ServletException e) {
             e.printStackTrace();
         }
-
-
     }
 }

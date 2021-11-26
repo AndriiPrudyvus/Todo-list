@@ -16,8 +16,12 @@
     <table>
         <tr><td>User Name: </td><td><input type="text" name="login" value="${NameJsp}"></td></tr>
         <tr><td>Password: </td><td><input type="password" name="password"></td></tr>
-        <tr><td></td><td><input type="submit" value="login"></td></tr>
+        <tr><td><input type="submit" value="login"></td></tr>
     </table>
+</form>
+
+<form action="registration.jsp"  >
+    <input type="submit" value="registration">
 </form>
 <p style=" color: red">
     ${errorMessage}

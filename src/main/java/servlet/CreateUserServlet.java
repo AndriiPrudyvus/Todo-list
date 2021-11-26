@@ -3,6 +3,7 @@ package servlet;
 import com.google.gson.Gson;
 import jdbc.JdbcConnection;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class CreateUserServlet extends HttpServlet {
                 if (resultSet.next()) {
                     status = "User already Exists";
                     req.getSession().setAttribute("status",status);
+                    req.getRequestDispatcher("/registration.jsp").forward(req, resp);
                     resp.sendRedirect("/registration.jsp");
                 } else {
                     int createResult = statement.executeUpdate("insert into user(login,password) values ('"
@@ -39,10 +41,10 @@ public class CreateUserServlet extends HttpServlet {
                             + userPassword + "')");
                     if (createResult > 0) {
                         req.getSession().setAttribute("NameJsp",userLogin);
-                        resp.sendRedirect("/login.jsp");
+                        req.getRequestDispatcher("/login.jsp").forward(req,resp);
                     }
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ServletException e) {
                 e.printStackTrace();
             }
         }

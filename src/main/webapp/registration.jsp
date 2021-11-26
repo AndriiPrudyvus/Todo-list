@@ -29,6 +29,9 @@
     </table>
 
 </form>
+<form action="login.jsp"  >
+    <input type="submit" value="back">
+</form>
 <p style=" color: red">
     ${status}
 </p>

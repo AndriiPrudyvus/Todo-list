@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import jdbc.JdbcConnection;
 import model.Task;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,12 +16,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+@WebServlet("/UpdateTaskServlet")
 public class UpdateTaskServlet extends HttpServlet {
-    private Gson gson = new Gson();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String idTask = req.getParameter("id");
+        String idTask = req.getParameter("taskId");
         String taskTitle = req.getParameter("title");
         String taskDescription = req.getParameter("description");
         Object userId = req.getSession().getAttribute("userId");
@@ -29,8 +32,11 @@ public class UpdateTaskServlet extends HttpServlet {
             Connection connection = JdbcConnection.getConnection();
             try {
                 Statement statement = connection.createStatement();
-                int updateResult = statement.executeUpdate("update task set title = '" + taskTitle + "',description= '" + taskDescription + "' where id = " + idTask + " and user_id=" + userId);
-                ResultSet resultSet = statement.executeQuery("select * from task where id = " + idTask + " and user_id=" + userId);
+                String sqlUpdate = "update task set title = '%s', description = '%s' where id = '%s' and user_id = %d";
+                int updateResult = statement.executeUpdate(String.format(sqlUpdate,
+                        taskTitle, taskDescription, idTask, (int) userId));
+                ResultSet resultSet =
+                        statement.executeQuery(String.format("select * from task where id = '%s' and user_id = %d",idTask, (int) userId));
 
                 if (updateResult > 0) {
                     while (resultSet.next()) {
@@ -39,15 +45,10 @@ public class UpdateTaskServlet extends HttpServlet {
                         task.setDescription(resultSet.getString("description"));
                     }
                 }
-            } catch (SQLException e) {
+                req.getRequestDispatcher("/AllTaskServlet").forward(req, resp);
+            } catch (SQLException | ServletException e) {
                 e.printStackTrace();
             }
         }
-        String jsonTask = this.gson.toJson(task);
-        PrintWriter out = resp.getWriter();
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        out.print(jsonTask);
-        out.flush();
     }
 }
