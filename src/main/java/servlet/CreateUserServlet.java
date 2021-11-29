@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@WebServlet("/RegistrationServlet")
+@WebServlet("/CreateUserServlet")
 public class CreateUserServlet extends HttpServlet {
 
     @Override
@@ -20,16 +20,19 @@ public class CreateUserServlet extends HttpServlet {
         String userPassword = req.getParameter("password");
         if (userLogin != null) {
             try {
-                ResultSet resultSet = SqlUtils.doSelect(
-                        String.format("select * from user where login = '%s'", userLogin));
-                if (resultSet.next()) {
-                    goToRegistrationPage(req, resp);
+                if (userLogin.isEmpty() && userPassword.isEmpty()) {
+                    goToRegistrationPage(req, resp, "Login or password are missing, must be filled !");
                 } else {
-                    goToLoginPage(req, resp, userLogin, userPassword);
+                    ResultSet resultSet = SqlUtils.doSelect(
+                            String.format("select * from user where login = '%s'", userLogin));
+                    if (resultSet.next()) {
+                        goToRegistrationPage(req, resp, "User already exist !");
+                    } else goToLoginPage(req, resp, userLogin, userPassword);
                 }
             } catch (SQLException | ServletException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
@@ -37,15 +40,13 @@ public class CreateUserServlet extends HttpServlet {
         int createResult = SqlUtils.doUpdate(String.format("insert into user(login,password) values ('%s','%s')",
                 userLogin, userPassword));
         if (createResult > 0) {
-            req.getSession().setAttribute("NameJsp", userLogin);
+            req.setAttribute("NameJsp", userLogin);
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
         }
     }
 
-    private void goToRegistrationPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String status = "User already Exists";
-        req.getSession().setAttribute("status", status);
+    private void goToRegistrationPage(HttpServletRequest req, HttpServletResponse resp, String status) throws ServletException, IOException {
+        req.setAttribute("status", status);
         req.getRequestDispatcher("/registration.jsp").forward(req, resp);
-        resp.sendRedirect("/registration.jsp");
     }
 }

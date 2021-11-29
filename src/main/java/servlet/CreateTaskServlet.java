@@ -13,21 +13,18 @@ import java.io.IOException;
 public class CreateTaskServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String taskTitle = req.getParameter("title");
         String taskDescription = req.getParameter("description");
         Object userId = req.getSession().getAttribute("userId");
 
-        if (userId != null) {
-            try {
+        if ( userId != null && !taskTitle.isEmpty()&& !taskDescription.isEmpty()) {
                 SqlUtils.doUpdate(String.format("insert into task(title,description,user_id) values ('%s', '%s', %d)",
                         taskTitle, taskDescription, (int) userId));
-                req.getRequestDispatcher("/AllTaskServlet").forward(req, resp);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            }
-
+        } else {
+            req.setAttribute("status", "Title and description are missing, must be filled !");
         }
+        req.getRequestDispatcher("/AllTaskServlet").forward(req, resp);
 
     }
 }

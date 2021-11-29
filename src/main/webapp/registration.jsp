@@ -12,7 +12,7 @@
 </head>
 <body>
 <h2>User Register Form</h2>
-<form action="RegistrationServlet" method="post">
+<form action="CreateUserServlet" method="post">
     <table>
         <tr>
             <td>User Name:</td>
@@ -29,12 +29,14 @@
     </table>
 
 </form>
-<form action="login.jsp"  >
-    <input type="submit" value="back">
-</form>
 <p style=" color: red">
     ${status}
 </p>
+<form action="login.jsp"  >
+    <input type="submit" value="back">
+    <input type="hidden" name="status" value="">
+</form>
+
 </body>
 </html>
 

@@ -39,8 +39,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     private void goToLoginPage(HttpServletRequest request, HttpServletResponse response, String userLogin) throws ServletException, IOException {
-        request.getSession().setAttribute("errorMessage", "Sorry, username or password error!");
-        request.getSession().setAttribute("NameJsp", userLogin);
+        request.setAttribute("errorMessage", "Sorry, username or password error!");
+        request.setAttribute("NameJsp", userLogin);
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 

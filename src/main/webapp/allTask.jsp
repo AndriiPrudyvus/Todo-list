@@ -44,5 +44,8 @@
 <form action="LogoutServlet" method="post">
     <input type="Submit" value="Logout"/>
 </form>
+<p style=" color: red">
+    ${status}
+</p>
 </body>
 </html>
