@@ -13,15 +13,19 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/AllTaskServlet")
 public class AllTaskServlet extends HttpServlet {
 
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<Task> taskList = new ArrayList<>();
+        Map<String, Task> taskMap = new HashMap<>();
         Object userId = req.getSession().getAttribute("userId");
 
         if (userId != null) {
@@ -31,6 +35,7 @@ public class AllTaskServlet extends HttpServlet {
                     taskList.add(TaskUtils.getTaskFromResultSet(resultSet));
                 }
                 req.setAttribute("taskList",taskList);
+                req.setAttribute("taskMap",taskMap);
                 req.getRequestDispatcher("/allTask.jsp").forward(req, resp);
             } catch (SQLException | ServletException e) {
                 e.printStackTrace();

@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="todoJson+html" />
+        <module name="todo-list (map+jdbc+Json+html+jsp)" />
         <module name="todo-list (Json+html+map+jsp)" />
         <module name="todoJson" />
-        <module name="todoJson+html" />
       </profile>
     </annotationProcessing>
   </component>

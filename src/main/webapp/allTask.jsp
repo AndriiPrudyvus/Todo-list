@@ -17,14 +17,19 @@
         <c:forEach items="${taskList}" var="item">
             <tr>
                 <td><c:out value="${item.title}"/></td>
-                <form action="ActionServlet" method="get">
+                <form action="GetTaskByIdServlet" method="get">
                     <td><input type="submit" value="View" name="action"></td>
                     <input type="hidden" name="taskId" value="${item.id}">
                     <input type="hidden" name="title" value="${item.title}">
                     <input type="hidden" name="description" value="${item.description}">
                 </form>
-                <form action="ActionServlet" method="post">
+                <form action="EditTaskServlet"  method="post">
                     <td><input type="submit" value="Edit" name="action"></td>
+                    <input type="hidden" name="taskId" value="${item.id}">
+                    <input type="hidden" name="title" value="${item.title}">
+                    <input type="hidden" name="description" value="${item.description}">
+                </form>
+                <form action="DeleteTaskServlet" method="post">
                     <td><input type="submit" value="Delete" name="action"></td>
                     <input type="hidden" name="taskId" value="${item.id}">
                     <input type="hidden" name="title" value="${item.title}">
@@ -34,7 +39,7 @@
         </c:forEach>
     </c:if>
     <tr>
-        <form action="ActionServlet" method="post">
+        <form action="CreateTaskServlet" method="post">
             <td><input type="text" placeholder="Title" name="title"/></td>
             <td><input type="text" placeholder="Description" name="description"/></td>
             <td><input type="submit" name="action" value="Create"></td>

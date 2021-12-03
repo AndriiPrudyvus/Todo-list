@@ -12,7 +12,7 @@
     <title>EditTask</title>
 </head>
 <body>
-<form action="ActionServlet" method="post">
+<form action="UpdateTaskServlet" method="post">
     <input type="text" name="title" value="${task.title}"/>
     <input type="text" name="description" value="${task.description}"/>
     <input type="hidden" name="taskId" value="${task.id}"/>
