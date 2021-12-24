@@ -32,7 +32,6 @@ public class CreateUserServlet extends HttpServlet {
             } catch (SQLException | ServletException e) {
                 e.printStackTrace();
             }
-
         }
     }
 

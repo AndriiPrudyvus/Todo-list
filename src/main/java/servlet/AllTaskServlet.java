@@ -21,7 +21,6 @@ import java.util.Map;
 public class AllTaskServlet extends HttpServlet {
 
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<Task> taskList = new ArrayList<>();

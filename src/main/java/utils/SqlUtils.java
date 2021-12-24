@@ -1,6 +1,6 @@
 package utils;
 
-import jdbc.JdbcConnection;
+import jdbc.JdbcConnectionPool;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,8 +10,9 @@ import java.sql.Statement;
 public class SqlUtils {
     public static ResultSet doSelect(String sql) {
         ResultSet resultSet = null;
-        Connection connection = JdbcConnection.getConnection();
+
         try {
+            Connection connection = JdbcConnectionPool.getConnection();
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
         } catch (SQLException e) {
@@ -22,8 +23,9 @@ public class SqlUtils {
 
     public static int doUpdate(String sql) {
         int result = 0;
-        Connection connection = JdbcConnection.getConnection();
+
         try {
+            Connection connection = JdbcConnectionPool.getConnection();
             Statement statement = connection.createStatement();
             result = statement.executeUpdate(sql);
         } catch (SQLException e) {
